@@ -56,3 +56,8 @@ Os arquivos da interface e referências públicas ficam no GitHub Pages; os GET 
 O mapa geográfico de 27 UFs usa a malha simplificada oficial do IBGE. Passe o cursor, use o foco do teclado ou toque numa UF para consultar a apuração atual e a data do arquivo TSE. Clique ou pressione Enter para abrir o recorte estadual. O degradê contínuo vai de azul (Flávio) a vermelho (Lula), com centro neutro no empate. A intensidade representa a diferença dos percentuais oficiais, em escala fixa de -100 a +100 pontos percentuais; sem votos válidos ou sem leitura, a UF fica cinza. O painel estadual mostra votos, percentuais, diferença e geração da fonte. Veja [fonte e transformação da geometria](docs/mapa.md).
 
 Paleta atual: Lula vermelho vibrante `#ff3347`; Flávio Bolsonaro azul vibrante `#2f8cff`.
+
+
+## Imagem para compartilhar
+
+Selecione Brasil, uma região ou um estado e use **Salvar imagem** no topo. A prévia reúne votação, apuração, gráfico com 2022 e percentuais das cinco regiões; use **Baixar PNG** ou **Compartilhar imagem** quando disponível. A imagem identifica o recorte e os horários e conserva a leitura do momento do clique. Veja [funcionamento e limites](docs/compartilhamento.md).

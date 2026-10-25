@@ -13,7 +13,7 @@ export const Curve=memo(function Curve({historical,current,label,axis,benchmark}
   const nearest=(data:CurvePoint[])=>hover===null?null:data.reduce<CurvePoint|null>((a,b)=>!a||Math.abs(b.progress-hover)<Math.abs(a.progress-hover)?b:a,null);
   const hp=nearest(historical),candidatePoint=nearest(current),cp=candidatePoint&&hover!=null&&Math.abs(candidatePoint.progress-hover)<=2?candidatePoint:null,last=current.at(-1);
   return <div className="curve-wrap">
-    <svg className="curve" viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`Curvas e referências de votação de ${label}, por ${axis}`} onMouseMove={e=>{const b=e.currentTarget.getBoundingClientRect();setHover(Math.max(0,Math.min(100,((e.clientX-b.left)/b.width*W-L)/(W-L-R)*100)));}} onMouseLeave={()=>setHover(null)}>
+    <svg className="curve" data-share-title={label} data-share-axis={axis} viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`Curvas e referências de votação de ${label}, por ${axis}`} onMouseMove={e=>{const b=e.currentTarget.getBoundingClientRect();setHover(Math.max(0,Math.min(100,((e.clientX-b.left)/b.width*W-L)/(W-L-R)*100)));}} onMouseLeave={()=>setHover(null)}>
       {[0,1,2,3,4].map(i=>{const v=lo+(hi-lo)*i/4;return <g key={i}><line x1={L} x2={W-R} y1={y(v)} y2={y(v)} stroke={v===50?"#465165":"#202938"} strokeDasharray={v===50?"4 5":undefined}/><text x={L-11} y={y(v)+4} textAnchor="end">{v.toFixed(0)}%</text></g>;})}
       {[0,20,40,60,80,100].map(v=><g key={v}><line x1={x(v)} x2={x(v)} y1={T} y2={H-B} stroke="#18212d"/><text x={x(v)} y={H-12} textAnchor="middle">{v}%</text></g>)}
       <path d={path(historical,"lula")} fill="none" stroke="var(--lula)" strokeOpacity=".5" strokeWidth="2" strokeDasharray="5 5"/>
@@ -23,7 +23,7 @@ export const Curve=memo(function Curve({historical,current,label,axis,benchmark}
       <path d={path(current,"bolsonaro")} fill="none" stroke="var(--bolsonaro)" strokeWidth="3.5"/>
       {current.map((p,i)=><g key={i}><circle cx={x(p.progress)} cy={y(p.lula)} r="1.7" fill="var(--lula)"/><circle cx={x(p.progress)} cy={y(p.bolsonaro)} r="1.7" fill="var(--bolsonaro)"/></g>)}
       {last&&<g><circle cx={x(last.progress)} cy={y(last.lula)} r="4" fill="var(--lula)"/><circle cx={x(last.progress)} cy={y(last.bolsonaro)} r="4" fill="var(--bolsonaro)"/></g>}
-      {hover!==null&&<line x1={x(hover)} x2={x(hover)} y1={T} y2={H-B} stroke="#bcc5d4" strokeDasharray="3 3"/>}
+      {hover!==null&&<line data-share-ignore="true" x1={x(hover)} x2={x(hover)} y1={T} y2={H-B} stroke="#bcc5d4" strokeDasharray="3 3"/>}
     </svg>
     <div className="curve-axis">{axis} →</div>
     {hover!==null&&(hp||cp)&&<div className="chart-tooltip"><b>{hover.toFixed(1)}% de avanço · ponto observado mais próximo</b>{cp&&<span>Hoje ({pct(cp.progress)}): <em className="color-lula">Lula {pct(cp.lula)}</em> · <em className="color-bolsonaro">Flávio {pct(cp.bolsonaro)}</em></span>}{hp&&<span>2022 ({pct(hp.progress)}): <em className="color-lula">Lula {pct(hp.lula)}</em> · <em className="color-bolsonaro">Jair {pct(hp.bolsonaro)}</em></span>}</div>}
