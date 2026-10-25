@@ -1,0 +1,52 @@
+name: Coletar apuração pública
+
+on:
+  schedule:
+    # Every five minutes, outside the busiest minute at the top of the hour.
+    - cron: "2-59/5 * * * *"
+  workflow_dispatch:
+    inputs:
+      continuous:
+        description: "Coletar a cada minuto durante até 330 minutos"
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+# Scheduled one-shots do not cancel or queue behind the manual continuous loop.
+concurrency:
+  group: presidential-public-collector-${{ inputs.continuous && 'continuous' || 'oneshot' }}
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-24.04
+    timeout-minutes: ${{ inputs.continuous && 350 || 5 }}
+    env:
+      PUBLIC_SITE_URL: https://presidencial-2026-publico.theodcastroribeiro.chatgpt.site
+      PUBLIC_COLLECTOR_TOKEN: ${{ secrets.PUBLIC_COLLECTOR_TOKEN }}
+      COLLECTOR_CONTINUOUS: ${{ inputs.continuous && 'true' || 'false' }}
+    steps:
+      - name: Obter somente o coletor
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6, verified against actions/checkout
+        with:
+          persist-credentials: false
+          sparse-checkout: scripts/collect-public.mjs
+          sparse-checkout-cone-mode: false
+      - name: Consultar TSE e conferir persistência
+        shell: bash
+        run: |
+          set -euo pipefail
+          collector_nodes=(/opt/hostedtoolcache/node/24.*/x64/bin/node)
+          collector_node="${collector_nodes[0]}"
+          if [[ ! -x "$collector_node" ]]; then
+            echo "Node.js 24 indisponível na imagem do runner."
+            exit 1
+          fi
+          if [[ "$COLLECTOR_CONTINUOUS" == "true" ]]; then
+            "$collector_node" scripts/collect-public.mjs --continuous --minutes 330
+          else
+            "$collector_node" scripts/collect-public.mjs
+          fi
