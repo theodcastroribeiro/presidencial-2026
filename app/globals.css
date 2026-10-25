@@ -14,3 +14,7 @@
 @media(max-width:760px){.reference-picker{padding:16px;margin-bottom:21px}.reference-picker>div:first-child{flex-direction:column;align-items:flex-start;gap:6px}.reference-picker h2{font-size:17px}.reference-options{grid-template-columns:1fr;gap:7px}.reference-options button{padding:11px 12px}.reference-options button b{font-size:12px}.reference-options button span{font-size:10px}.reference-picker>p{font-size:10px}.projection-reference{font-size:9px}.projection-comparison,.projection-comparison>p{font-size:9px}.chart-legend{font-size:8px}}
 
 .geography-table-only{display:block}
+
+/* The progress chart sits beside the result and its sensitivity controls. */
+.projection-grid.has-count-progress{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:stretch}.projection-grid.has-count-progress>.count-progress{grid-column:2;grid-row:1 / span 2}.projection-grid.has-count-progress>.scenario-card{grid-column:1;grid-row:2}.projection-grid.has-count-progress>.projection-card{min-width:0}.projection-grid.has-count-progress .projected-numbers strong{font-size:clamp(30px,3.1vw,48px)}
+@media(max-width:1040px){.projection-grid.has-count-progress{grid-template-columns:minmax(0,1fr)}.projection-grid.has-count-progress>.scenario-card,.projection-grid.has-count-progress>.count-progress{grid-column:auto;grid-row:auto}}

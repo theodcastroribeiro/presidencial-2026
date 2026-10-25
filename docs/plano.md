@@ -87,3 +87,10 @@ Validação executada em 2026-10-25 entre 19h26 e 19h28 (America/Belem): PNGs re
 Pedido autorizado: acrescentar resultados finais oficiais do primeiro turno, com percentuais individuais e fonte, no painel e no PNG. A entrega cria um bloco independente por recorte e um ativo público próprio, usando todos os votos válidos da fonte e ordem fixa por número. Regiões são identificadas como agregadas. Nenhuma nova diferença, classificação ou comparação é calculada. Fontes e limites em [primeiro turno](primeiro-turno.md).
 
 Validação executada em 2026-10-25 entre 19h49 e 19h54 (America/Belem): 29 arquivos oficiais finais, todos com 100% das seções e 12 candidaturas válidas, preservados no novo ativo; cinco agregados completos. TypeScript passou nas duas cópias, checks de helper/componentes/diff e links aprovados. Navegador confirmou Brasil, UF e região com respectivas fontes, geração e ordem numérica; PNG nacional baixado e inspecionado, PNG regional gerado, sem cortes no bloco novo. Em 390px, tabela e página sem overflow. A imagem congela os resultados oficiais com o recorte correto. Publicação segue nesta entrega, mantendo audiência e coleta existentes.
+
+
+## Curva de projeção da apuração — 2026-10-25 (America/Belem)
+
+Adicionado gráfico do percentual de seções ao longo do tempo, ao lado do cenário de resultado, acompanhando o recorte escolhido. A série observada conserva lacunas e revisões; a continuação tracejada representa um cenário de 30 minutos mantendo o ritmo recente, com faixa não probabilística. O teto de 100% não promete conclusão nem seu horário. O PNG inclui a mesma curva, fontes, horários e método.
+
+Verificação executada entre 20h24 e 20h28: 67 testes aprovados (15 novos), TypeScript nas duas cópias, revisão independente de qualidade dos dados, desktop/mobile e PNGs de Brasil, Nordeste e Pará. Consulte [método e evidências](curva-apuracao.md). Código e builds seguem o fluxo de publicação existente, preservando público, coleta e versão original.

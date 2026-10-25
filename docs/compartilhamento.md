@@ -26,3 +26,8 @@ Em 2026-10-25, entre 19h26 e 19h28 (America/Belem), o navegador gerou e baixou P
 ## Resultados do primeiro turno - 2026-10-25
 
 O PNG passa a conter um bloco separado com os resultados oficiais do primeiro turno do recorte capturado, incluindo candidatos em ordem numérica, votos, percentuais publicados, geração e fonte do TSE. Dados regionais são agregados das UFs e assim identificados. O [registro de fonte](primeiro-turno.md) documenta o denominador e a cobertura. A exportação conserva a mesma leitura desse bloco ao longo da renderização.
+
+
+## Curva de avanço da apuração — 2026-10-25
+
+O PNG inclui a curva de seções totalizadas do recorte selecionado, com linha observada, trecho estimado e faixa de ritmo, quando disponíveis. O SVG, resumo, fonte, horário e limites são capturados no mesmo clique. Estimativa indisponível ou suspensa permanece identificada. Veja [método](curva-apuracao.md).

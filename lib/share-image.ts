@@ -1,6 +1,16 @@
 import type { Scope } from "./ui-types";
 import type { OfficialFirstRoundResult } from "./first-round-results";
 
+export type ShareProgressChart = {
+  svg: string | null;
+  title: string;
+  summary: string;
+  note: string;
+  sourceUrl: string;
+  sourceAt: string | null;
+  scopeCode: string;
+};
+
 export type ShareImageInput = {
   scope: Scope;
   title: string;
@@ -13,6 +23,7 @@ export type ShareImageInput = {
   stale: boolean;
   capturedAt: string;
   firstRound?: OfficialFirstRoundResult | null;
+  progressChart?: ShareProgressChart | null;
 };
 export type ShareImageResult = { blob: Blob; filename: string };
 
@@ -78,7 +89,7 @@ export function captureChartSvg(element: SVGSVGElement | null): string | null {
   const clone = element.cloneNode(true) as SVGSVGElement;
   const originals = [element, ...Array.from(element.querySelectorAll("*"))];
   const copies = [clone, ...Array.from(clone.querySelectorAll("*"))];
-  const properties = ["fill", "fill-opacity", "stroke", "stroke-opacity", "stroke-width", "stroke-dasharray", "stroke-dashoffset", "stroke-linecap", "stroke-linejoin", "opacity", "font-size", "font-weight", "font-style", "letter-spacing", "text-anchor", "dominant-baseline", "visibility", "display", "paint-order", "vector-effect"];
+  const properties = ["fill", "fill-opacity", "color", "stop-color", "stop-opacity", "color-interpolation", "stroke", "stroke-opacity", "stroke-width", "stroke-dasharray", "stroke-dashoffset", "stroke-linecap", "stroke-linejoin", "opacity", "font-size", "font-weight", "font-style", "letter-spacing", "text-anchor", "dominant-baseline", "visibility", "display", "paint-order", "vector-effect"];
   for (let index = 0; index < originals.length; index++) {
     const source = originals[index], target = copies[index];
     const computed = window.getComputedStyle(source);
@@ -127,6 +138,44 @@ function qualityMessages(input: ShareImageInput): string[] {
   return messages;
 }
 
+
+
+/** Capture-only addition: observed section progress and the panel's existing scenario. */
+function progressChartBlock(progress: ShareProgressChart, expectedScope: string, y: number): { markup: string; height: number } {
+  if (progress.scopeCode !== expectedScope) throw new Error("A curva de avanço pertence a outro recorte. Aguarde o painel atualizar.");
+  const parts: string[] = [];
+  let cursor = y + 38;
+  const titles = wrap(progress.title || "Avanço de seções ao longo do tempo", 94);
+  parts.push(multiline(MARGIN + 24, cursor, titles, 25, COLORS.text, 33, 700));
+  cursor += titles.length * 33;
+  parts.push(text(MARGIN + 24, cursor, "OBSERVADO + CENÁRIO DE RITMO · estimativa própria, não é projeção do TSE", 16, COLORS.yellow, 600));
+  cursor += 28;
+  const summaries = wrap(progress.summary || "Resumo da estimativa indisponível nesta captura.", 130);
+  parts.push(multiline(MARGIN + 24, cursor, summaries, 19, COLORS.text, 27, 500));
+  cursor += summaries.length * 27 + 11;
+  const plotX = MARGIN + 24, plotWidth = CONTENT - 48, plotHeight = 420;
+  if (progress.svg) parts.push(chartMarkup(progress.svg, plotX, cursor, plotWidth, plotHeight));
+  else {
+    parts.push(rect(plotX, cursor, plotWidth, plotHeight, "#0b131f", COLORS.line, 4));
+    parts.push(text(WIDTH / 2, cursor + 190, "Curva de avanço indisponível nesta captura", 25, COLORS.muted, 500, "middle"));
+    parts.push(text(WIDTH / 2, cursor + 229, "Nenhuma trajetória ou estimativa foi criada para a imagem.", 19, COLORS.muted, 400, "middle"));
+  }
+  cursor += plotHeight + 28;
+  const legends = wrap("Linha observada: seções totalizadas na fonte. Trecho tracejado e faixa, quando presentes: cenário estimado exibido no painel.", 142);
+  parts.push(multiline(MARGIN + 24, cursor, legends, 17, COLORS.muted, 24));
+  cursor += legends.length * 24 + 7;
+  const notes = wrap(progress.note || "Limites e hipóteses indisponíveis nesta captura; consulte o painel.", 140);
+  parts.push(multiline(MARGIN + 24, cursor, notes, 17, COLORS.muted, 24));
+  cursor += notes.length * 24 + 9;
+  const origin = wrap(`Recorte: ${progress.scopeCode} · horário da origem observada: ${localTime(progress.sourceAt)} (Belém).`, 140);
+  parts.push(multiline(MARGIN + 24, cursor, origin, 16, COLORS.muted, 23));
+  cursor += origin.length * 23;
+  const sources = wrap(progress.sourceUrl ? `Fonte observada: ${progress.sourceUrl}` : "Endereço da fonte observada indisponível nesta captura.", 154);
+  parts.push(multiline(MARGIN + 24, cursor, sources, 15, COLORS.muted, 21));
+  cursor += sources.length * 21;
+  const height = cursor + 22 - y;
+  return { markup: rect(MARGIN, y, CONTENT, height) + parts.join(""), height };
+}
 
 /** Display-only first-round result. No shares, transfers or differences are calculated here. */
 function firstRoundBlock(input: ShareImageInput, y: number): { markup: string; height: number } {
@@ -305,7 +354,12 @@ export function buildShareSvg(input: ShareImageInput): string {
   parts.push(`<path d="M${MARGIN + 558} ${legendY - 6}h42" stroke="${COLORS.text}" stroke-width="2" stroke-dasharray="6 6"/>` + text(MARGIN + 612, legendY, "2022 · tracejado, quando exibido", 18, COLORS.muted));
   parts.push(text(MARGIN + 24, axisY, `Eixo horizontal: ${input.axisLabel || "avanço da apuração"}`, 18, COLORS.muted));
   parts.push(multiline(MARGIN + 24, noteY, chartNoteLines, 17, COLORS.muted, 24));
-  const tableY = chartY + chartHeight + 22;
+  let tableY = chartY + chartHeight + 22;
+  if (input.progressChart) {
+    const progress = progressChartBlock(input.progressChart, input.scope.code, tableY);
+    parts.push(progress.markup);
+    tableY += progress.height + 22;
+  }
   const tableHeight = 259;
   parts.push(rect(MARGIN, tableY, CONTENT, tableHeight));
   parts.push(text(MARGIN + 24, tableY + 37, "Brasil · votação nas cinco regiões", 25, COLORS.text, 700));
@@ -334,13 +388,14 @@ export function buildShareSvg(input: ShareImageInput): string {
 }
 
 function freezeInput(input: ShareImageInput): ShareImageInput {
-  const copied: ShareImageInput = { ...input, scope: { ...input.scope }, regions: input.regions.map(region => ({ ...region })), national: input.national ? { ...input.national } : null, reference: input.reference ? { ...input.reference } : null, firstRound: input.firstRound ? structuredClone(input.firstRound) : null };
+  const copied: ShareImageInput = { ...input, scope: { ...input.scope }, regions: input.regions.map(region => ({ ...region })), national: input.national ? { ...input.national } : null, reference: input.reference ? { ...input.reference } : null, firstRound: input.firstRound ? structuredClone(input.firstRound) : null, progressChart: input.progressChart ? { ...input.progressChart } : null };
   const freezeNested = (value: unknown): void => {
     if (!value || typeof value !== "object" || Object.isFrozen(value)) return;
     for (const item of Object.values(value)) freezeNested(item);
     Object.freeze(value);
   };
   freezeNested(copied.firstRound);
+  freezeNested(copied.progressChart);
   Object.freeze(copied.scope);
   copied.regions.forEach(Object.freeze);
   Object.freeze(copied.regions);

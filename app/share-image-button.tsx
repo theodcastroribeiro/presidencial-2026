@@ -124,10 +124,30 @@ export function ShareImageButton({ firstRound, scope, title, regions, national, 
         throw new Error("O recorte do gráfico mudou. Aguarde a atualização e tente novamente.");
       }
       const chartSvg = svg ? captureChartSvg(svg) : null;
+      const progressPane = document.getElementById("apuracao-projetada");
+      let progressChart: ShareImageInput["progressChart"] = null;
+      if (progressPane) {
+        if (progressPane.dataset.shareScope !== scope.code || progressPane.dataset.shareReady !== "true") {
+          throw new Error("Aguarde carregar a curva de avanço deste recorte e tente novamente.");
+        }
+        const progressSvg = progressPane.querySelector<SVGSVGElement>("svg.count-progress-chart");
+        if (progressSvg && progressSvg.dataset.shareScope !== scope.code) {
+          throw new Error("O recorte da curva de avanço mudou. Aguarde a atualização e tente novamente.");
+        }
+        progressChart = {
+          svg: progressSvg ? captureChartSvg(progressSvg) : null,
+          title: progressPane.dataset.progressTitle || "Avanço de seções ao longo do tempo",
+          summary: progressPane.dataset.progressSummary || "",
+          note: progressPane.dataset.progressNote || "",
+          sourceUrl: progressPane.dataset.progressSourceUrl || "",
+          sourceAt: progressPane.dataset.progressSourceAt || null,
+          scopeCode: progressPane.dataset.shareScope,
+        };
+      }
       const input: ShareImageInput = structuredClone({
         scope, title, regions, national, reference, axisLabel, stale, firstRound,
         chartNote: chartNote + (chartSvg ? "" : " Gráfico indisponível no momento da captura."),
-        chartSvg, capturedAt: new Date().toISOString(),
+        chartSvg, progressChart, capturedAt: new Date().toISOString(),
       });
       const result = await renderShareImage(input);
       if (!mounted.current || currentJob !== job.current) return;

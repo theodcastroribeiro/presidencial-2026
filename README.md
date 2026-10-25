@@ -66,3 +66,8 @@ Selecione Brasil, uma região ou um estado e use **Salvar imagem** no topo. A pr
 ## Resultado oficial do primeiro turno
 
 O bloco **Resultado oficial · 1º turno** acompanha o recorte selecionado e também aparece no PNG de **Salvar imagem**, com candidatos em ordem numérica, votos, percentuais e fonte do TSE. Nas regiões, os totais são identificados como agregações das UFs. Veja [fontes e verificação](docs/primeiro-turno.md).
+
+
+## Curva de avanço da apuração
+
+O cartão **Projeção da apuração**, ao lado do cenário de resultado, acompanha Brasil, região, UF ou exterior. Mostra as seções totalizadas ao longo do horário, o trecho estimado para os próximos 30 minutos e uma faixa de cenários de ritmo. A estimativa é independente do TSE e não promete horário de conclusão. O gráfico também acompanha **Salvar imagem**. Veja [método e validação](docs/curva-apuracao.md).
