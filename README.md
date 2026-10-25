@@ -46,6 +46,6 @@ Atualizado em 2026-10-25, fuso America/Belem.
 
 ## GitHub Pages
 
-A mesma interface é publicada em `https://theodcastroribeiro.github.io/presidencial-2026/`. O workflow `.github/workflows/pages.yml` constrói a entrada React estática de `pages/` com `vite.pages.config.ts` a cada push na branch `main`, sem alterar o build Sites. A saída `dist-pages/` não é versionada.
+A mesma interface é publicada em `https://theodcastroribeiro.github.io/presidencial-2026/`. O workflow `.github/workflows/pages.yml` constrói a entrada React estática de `github-pages/` com `vite.pages.config.ts` a cada push na branch `main`, sem alterar o build Sites. A saída `dist-pages/` não é versionada.
 
 Os arquivos da interface e referências públicas ficam no GitHub Pages; os GET de resultados e histórico consultam a API pública existente no Sites, com CORS restrito à origem `https://theodcastroribeiro.github.io`. Nenhum segredo é enviado ao navegador. O coletor e seu armazenamento continuam na infraestrutura existente, assim como o painel anterior.
