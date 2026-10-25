@@ -16,7 +16,7 @@ Publicar o painel para compartilhamento por link e seu código no GitHub, manten
 
 - Cópia pública independente, com armazenamento e segredo de coleta próprios.
 - Metadados sociais e imagem de compartilhamento para WhatsApp.
-- Resultados oficiais, comparação 2022/primeiro turno, destaque SP/MG/BA e recortes territoriais preservados.
+- Resultados oficiais, histórico de 2022, recortes territoriais e acompanhamento de SP/MG/BA na parte inferior.
 - Consultas públicas somente leitura; gravação do histórico por coletor autenticado.
 - GitHub Actions com agenda de cinco minutos e execução contínua de um minuto, sem depender de computador ou navegador abertos.
 - Preservação explícita da última leitura em caso de indisponibilidade da fonte, com projeção suspensa para dados antigos.
@@ -36,8 +36,15 @@ Verificação em **2026-10-25**, fuso America/Belem:
 
 ## Limites
 
-As projeções são cenários territoriais, não resultados oficiais nem probabilidades calibradas. A combinação 50/50 das referências não foi validada por backtest. O TSE e as agendas de hospedagem podem apresentar atrasos. O histórico não recupera automaticamente parciais anteriores ao início da coleta.
+As projeções são cenários territoriais, não resultados oficiais nem probabilidades calibradas. O TSE e as agendas de hospedagem podem apresentar atrasos. O histórico não recupera automaticamente parciais anteriores ao início da coleta.
 
 ## Operação
 
 O [README](../README.md) aponta para o site e a rotina de atualização. [Coleta](coleta.md) documenta cadência, autenticação e retomada. [Método](historico.md) documenta fontes e denominadores. A coleta segue automaticamente; uma nova rodada contínua pode ser iniciada pelo workflow quando necessário, mantendo a agenda de cinco minutos como reforço.
+
+
+## Ajuste de interface — 2026-10-25 (America/Belem)
+
+Pedido de simplificação: SP/MG/BA movidos para o fim da página, depois da tabela territorial e das estatísticas. Os três cartões mostram somente a parcial atual. Removidos da interface o seletor de referências e todos os indicadores, linhas, textos e carregamento de dados do primeiro turno. A interface usa apenas a referência de 2022 já existente; nenhum cálculo estatístico foi acrescentado. A coleta automática e os endpoints permanecem preservados.
+
+Validação: TypeScript aprovado nas duas cópias; navegador local confirmou ausência de referências ao primeiro turno e posicionamento dos cartões depois da tabela, antes do rodapé. Build e publicação seguem nesta entrega.

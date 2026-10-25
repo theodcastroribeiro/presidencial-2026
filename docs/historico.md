@@ -143,3 +143,8 @@ Em 2026-10-25 foram executadas as seguintes verificações: 5.286 eventos nacion
 A referência de 2026 não é descartada ao superar 10% de apuração. O deslocamento compartilhado é a diferença entre a participação atual de Lula e a participação do primeiro turno esperada **nas mesmas UFs, ponderadas pelos mesmos votos válidos já contados**. O deslocamento global é suavizado pelo avanço nacional até 10%. Em cada UF, a participação dos votos pendentes é a participação da dupla no primeiro turno acrescida de `(1-q) × deslocamentoGlobal + q × deslocamentoLocal`, com `q` igual ao avanço do eleitorado processado da UF e limites de 0% a 100%. Isso é uma hipótese territorial compartilhada; não mede transferências individuais. O rendimento de votos válidos mantém mistura de rendimento final de referência com rendimento atual, com apoio inicial até 10%. Ao zerar a pendência, os votos observados prevalecem integralmente.
 
 O cenário combinado calcula a média dos votos projetados com pesos 50/50. Sua proporção residual por UF é ponderada pelo número de votos pendentes de cada referência; a sensibilidade é aplicada a esse resíduo combinado e limitada dentro de cada UF. Não foi demonstrado ganho de acurácia por backtest.
+
+
+## Interface simplificada em 2026-10-25
+
+A pedido do usuário, a interface deixou de exibir referências ao primeiro turno e ao cenário combinado. Os arquivos importados e módulos anteriores permanecem no projeto como histórico técnico. SP/MG/BA ficam no fim da página, com dados atuais do TSE.

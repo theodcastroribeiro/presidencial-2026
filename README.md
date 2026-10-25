@@ -1,15 +1,15 @@
 # Observatório · Presidencial 2026
 
-Painel independente para acompanhar a apuração presidencial do segundo turno de 2026, com resultados do TSE, curvas de 2022, referência territorial do primeiro turno e cenários para os votos pendentes.
+Painel independente para acompanhar a apuração presidencial do segundo turno de 2026, com resultados do TSE, curvas de 2022 e cenários para os votos pendentes.
 
 **[Abrir o painel público](https://presidencial-2026-publico.theodcastroribeiro.chatgpt.site)** · [Código no GitHub](https://github.com/theodcastroribeiro/presidencial-2026) · [Coleta automática](https://github.com/theodcastroribeiro/presidencial-2026/actions/workflows/collect.yml)
 
 ## O que o painel mostra
 
 - Lula em **vermelho** e Flávio Bolsonaro em **amarelo**. A referência de 2022 identifica Jair Bolsonaro separadamente.
-- Comparação destacada de SP, MG e BA com o primeiro turno.
+- Acompanhamento atual de SP, MG e BA na parte inferior da página.
 - Brasil, cinco regiões, 27 UFs e exterior, com apuração, eleitorado e pendência.
-- Curvas comparadas pelo avanço da apuração, com opção de referência em 2022, no primeiro turno ou na combinação das duas.
+- Curvas comparadas pelo avanço da apuração, com histórico de 2022.
 - Projeção territorial dos votos pendentes e análise de sensibilidade. É estimativa independente, sem probabilidade de vitória ou ganho de precisão demonstrado.
 
 ## Atualização

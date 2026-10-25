@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 const site = "https://presidencial-2026-publico.theodcastroribeiro.chatgpt.site";
-const description = "Apuração presidencial com dados oficiais do TSE, comparação com 2022 e o primeiro turno de 2026, por estado e região. Cenários independentes.";
+const description = "Apuração presidencial com dados oficiais do TSE, histórico de 2022, por estado e região. Cenários independentes.";
 export const metadata: Metadata = {
   metadataBase: new URL(site),
   title: "Observatório | Presidencial 2026",
