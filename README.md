@@ -2,7 +2,7 @@
 
 Painel independente para acompanhar a apuração presidencial do segundo turno de 2026, com resultados do TSE, curvas de 2022 e cenários para os votos pendentes.
 
-**[Abrir o painel público](https://presidencial-2026-publico.theodcastroribeiro.chatgpt.site)** · [Código no GitHub](https://github.com/theodcastroribeiro/presidencial-2026) · [Coleta automática](https://github.com/theodcastroribeiro/presidencial-2026/actions/workflows/collect.yml)
+**[Abrir o site no GitHub Pages](https://theodcastroribeiro.github.io/presidencial-2026/)** · [Versão pública no Sites](https://presidencial-2026-publico.theodcastroribeiro.chatgpt.site) · [Código no GitHub](https://github.com/theodcastroribeiro/presidencial-2026) · [Coleta automática](https://github.com/theodcastroribeiro/presidencial-2026/actions/workflows/collect.yml)
 
 ## O que o painel mostra
 
@@ -42,3 +42,10 @@ npm run build
 As consultas públicas são somente leitura. `POST /api/refresh` exige `COLLECTOR_TOKEN` no servidor e o segredo correspondente `PUBLIC_COLLECTOR_TOKEN` no GitHub Actions. Nenhum segredo deve entrar no código, em argumentos de comando, nos arquivos de publicação ou no Git. O manifesto `.openai/hosting.json` contém apenas o identificador público e as bindings da aplicação.
 
 Atualizado em 2026-10-25, fuso America/Belem.
+
+
+## GitHub Pages
+
+A mesma interface é publicada em `https://theodcastroribeiro.github.io/presidencial-2026/`. O workflow `.github/workflows/pages.yml` constrói a entrada React estática de `pages/` com `vite.pages.config.ts` a cada push na branch `main`, sem alterar o build Sites. A saída `dist-pages/` não é versionada.
+
+Os arquivos da interface e referências públicas ficam no GitHub Pages; os GET de resultados e histórico consultam a API pública existente no Sites, com CORS restrito à origem `https://theodcastroribeiro.github.io`. Nenhum segredo é enviado ao navegador. O coletor e seu armazenamento continuam na infraestrutura existente, assim como o painel anterior.

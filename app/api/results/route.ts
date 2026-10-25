@@ -1,3 +1,4 @@
+import { publicReadHeaders } from "@/lib/public-read-headers";
 import { fetchElectionSnapshot } from "@/lib/election.mjs";
 import baseline from "@/public/data/baseline-2022.json";
 import historical2022 from "@/public/data/historico-2022-uf.json";
@@ -17,13 +18,17 @@ export async function GET() {
     return Response.json(result, {
       status: result.national ? 200 : 503,
       headers: {
-        "Cache-Control": "no-store",
+        ...publicReadHeaders,
         "X-Data-Source": "Tribunal Superior Eleitoral",
       },
     });
   } catch {
     const preserved = await readPreservedSnapshot(env.BUCKET);
-    if (preserved) return Response.json(preserved, { headers: { "Cache-Control": "no-store", "X-Data-Source": "Tribunal Superior Eleitoral; leitura anterior preservada" } });
-    return Response.json({ error: "Não foi possível consultar o TSE agora. Tente novamente em instantes.", fetchedAt: new Date().toISOString() }, { status: 503, headers: { "Cache-Control": "no-store" } });
+    if (preserved) return Response.json(preserved, { headers: { ...publicReadHeaders, "X-Data-Source": "Tribunal Superior Eleitoral; leitura anterior preservada" } });
+    return Response.json({ error: "Não foi possível consultar o TSE agora. Tente novamente em instantes.", fetchedAt: new Date().toISOString() }, { status: 503, headers: publicReadHeaders });
   }
+}
+
+export async function OPTIONS() {
+  return new Response(null, { status: 204, headers: publicReadHeaders });
 }

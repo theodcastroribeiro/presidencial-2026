@@ -48,3 +48,12 @@ O [README](../README.md) aponta para o site e a rotina de atualização. [Coleta
 Pedido de simplificação: SP/MG/BA movidos para o fim da página, depois da tabela territorial e das estatísticas. Os três cartões mostram somente a parcial atual. Removidos da interface o seletor de referências e todos os indicadores, linhas, textos e carregamento de dados do primeiro turno. A interface usa apenas a referência de 2022 já existente; nenhum cálculo estatístico foi acrescentado. A coleta automática e os endpoints permanecem preservados.
 
 Validação: TypeScript aprovado nas duas cópias; navegador local confirmou ausência de referências ao primeiro turno e posicionamento dos cartões depois da tabela, antes do rodapé. Build e publicação seguem nesta entrega.
+
+
+## Conferência e endereço GitHub Pages — 2026-10-25 (America/Belem)
+
+Às **17:30:09**, os 29 arquivos oficiais consultados diretamente no TSE coincidiram com os campos exibidos pela API pública, sem recortes com falha. A geração nacional do arquivo oficial permanecia em **17:06:31**; o horário da consulta é distinto do horário da geração. O histórico deduplica versões iguais e não cria novo ponto apenas por consultar novamente.
+
+Foi habilitado GitHub Pages público com HTTPS para `https://theodcastroribeiro.github.io/presidencial-2026/`. A interface reutiliza os mesmos componentes, com build estático independente; chamadas de leitura apontam para a API existente e dados estáticos usam o prefixo do repositório. O CORS permite apenas a origem pública do usuário no GitHub. Credenciais de coleta não são incluídas no frontend. Nenhum cálculo eleitoral foi acrescentado.
+
+Build estático local aprovado. A entrega inclui publicar CORS no Sites, executar o workflow de Pages e validar a interface e as requisições reais no domínio github.io.
