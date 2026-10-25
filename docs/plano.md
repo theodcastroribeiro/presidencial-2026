@@ -10,7 +10,7 @@ tags: [eleicoes, publicacao, operacao]
 
 ## Escopo autorizado
 
-Publicar o painel para compartilhamento por link e seu código no GitHub, mantendo a versão existente funcionando em paralelo. Cores: Lula vermelho; Bolsonaro amarelo.
+Publicar o painel para compartilhamento por link e seu código no GitHub, mantendo a versão existente funcionando em paralelo. Cores atuais: Lula vermelho vibrante; Bolsonaro azul vibrante.
 
 ## Implementado em 2026-10-25
 
@@ -57,3 +57,12 @@ Validação: TypeScript aprovado nas duas cópias; navegador local confirmou aus
 Foi habilitado GitHub Pages público com HTTPS para `https://theodcastroribeiro.github.io/presidencial-2026/`. A interface reutiliza os mesmos componentes, com build estático independente; chamadas de leitura apontam para a API existente e dados estáticos usam o prefixo do repositório. O CORS permite apenas a origem pública do usuário no GitHub. Credenciais de coleta não são incluídas no frontend. Nenhum cálculo eleitoral foi acrescentado.
 
 Build estático local aprovado. A entrega inclui publicar CORS no Sites, executar o workflow de Pages e validar a interface e as requisições reais no domínio github.io.
+
+
+## Mapa e paleta - 2026-10-25 (America/Belem)
+
+O usuário confirmou fazer somente o mapa nesta entrega. A geometria oficial simplificada do IBGE substitui o cartograma esquemático: 27 UFs, DF preservado e escala de cinza pelo avanço da apuração. Hover, foco do teclado e toque mostram informações do arquivo oficial; a seleção abre o recorte estadual existente. Cada leitura identifica a data e hora TSE. Fonte e transformação estão em [mapa](mapa.md).
+
+A paleta passou a Lula vermelho vibrante `#ff3347` e Flávio Bolsonaro azul vibrante `#2f8cff`, com variáveis semânticas compartilhadas. Os gráficos não receberam novas funções nesta entrega. Atualizações automáticas e audiência dos sites permanecem preservadas.
+
+Verificações executadas: 27 geometrias e DF; clique em PA; hover em MG mantendo a seleção PA; Enter selecionando MG; retorno a Brasil; paleta RGB correspondente; nenhum erro de console. Em viewport de 390px, o mapa e os detalhes empilham sem overflow, o seletor móvel tem alvo de 44px e seleciona o DF. TypeScript passou. Builds e publicação seguem nesta mesma entrega.

@@ -6,7 +6,7 @@ Painel independente para acompanhar a apuração presidencial do segundo turno d
 
 ## O que o painel mostra
 
-- Lula em **vermelho** e Flávio Bolsonaro em **amarelo**. A referência de 2022 identifica Jair Bolsonaro separadamente.
+- Lula em **vermelho vibrante** e Flávio Bolsonaro em **azul vibrante**. A referência de 2022 identifica Jair Bolsonaro separadamente.
 - Acompanhamento atual de SP, MG e BA na parte inferior da página.
 - Brasil, cinco regiões, 27 UFs e exterior, com apuração, eleitorado e pendência.
 - Curvas comparadas pelo avanço da apuração, com histórico de 2022.
@@ -49,3 +49,10 @@ Atualizado em 2026-10-25, fuso America/Belem.
 A mesma interface é publicada em `https://theodcastroribeiro.github.io/presidencial-2026/`. O workflow `.github/workflows/pages.yml` constrói a entrada React estática de `github-pages/` com `vite.pages.config.ts` a cada push na branch `main`, sem alterar o build Sites. A saída `dist-pages/` não é versionada.
 
 Os arquivos da interface e referências públicas ficam no GitHub Pages; os GET de resultados e histórico consultam a API pública existente no Sites, com CORS restrito à origem `https://theodcastroribeiro.github.io`. Nenhum segredo é enviado ao navegador. O coletor e seu armazenamento continuam na infraestrutura existente, assim como o painel anterior.
+
+
+## Mapa interativo
+
+O mapa geográfico de 27 UFs usa a malha simplificada oficial do IBGE. Passe o cursor, use o foco do teclado ou toque numa UF para consultar a apuração atual e a data do arquivo TSE. Clique ou pressione Enter para abrir o recorte estadual. A escala neutra de cinza indica percentual de seções apuradas. Veja [fonte e transformação da geometria](docs/mapa.md).
+
+Paleta atual: Lula vermelho vibrante `#ff3347`; Flávio Bolsonaro azul vibrante `#2f8cff`.

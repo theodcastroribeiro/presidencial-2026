@@ -10,7 +10,7 @@ tags: [eleicoes, historico, metodologia]
 
 Atualizado em **2026-10-25**, fuso **America/Belem**.
 
-Convenção visual: **Lula vermelho** (`#ff655f`) e **Bolsonaro amarelo** (`#f3d34a`) nas séries de 2022 e 2026, nas referências do primeiro turno e nos recortes territoriais. As cores identificam os candidatos; contagens, percentuais, denominadores e identidade de Jair/Flávio permanecem vinculados às respectivas fontes.
+Convenção visual: **Lula vermelho vibrante** (`#ff3347`) e **Bolsonaro azul vibrante** (`#2f8cff`) nas séries de 2022 e 2026, nas referências do primeiro turno e nos recortes territoriais. As cores identificam os candidatos; contagens, percentuais, denominadores e identidade de Jair/Flávio permanecem vinculados às respectivas fontes.
 
 ## Fontes importadas
 
