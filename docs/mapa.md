@@ -151,3 +151,10 @@ out.write_bytes(encoded)
 ```
 
 A reprodução em outra data pode receber uma versão diferente da API e terá outra data de consulta; comparar os hashes dos insumos antes de esperar identidade de bytes.
+
+
+## Cor por diferença dos resultados - 2026-10-25 (America/Belem)
+
+A escala do mapa passou a representar a diferença descritiva entre os percentuais oficiais: `lulaPercent - bolsonaroPercent`. O nome técnico legado `bolsonaro` corresponde a Flávio no pleito atual. Não há renormalização dos votos entre os candidatos. Valores positivos seguem para vermelho `#ff3347`, negativos para azul `#2f8cff`; zero é neutro. A escala é fixa e simétrica, de -100 a +100 pontos percentuais, sem depender do maior resultado estadual de cada atualização. A cor descreve somente a parcial consultada, sem probabilidade ou previsão de vencedor.
+
+Quando falta uma leitura válida, não há votos válidos ou um percentual é desconhecido, o estado permanece cinza. Zero conhecido continua sendo zero. A geometria e os alvos acessíveis permanecem preservados. Cursor, teclado e toque mostram o resultado atual da UF: votos e percentuais oficiais em ordem fixa, diferença em pontos percentuais, avanço da apuração e horário da geração, com link para o arquivo do TSE. A seleção por clique continua abrindo o recorte estadual existente.

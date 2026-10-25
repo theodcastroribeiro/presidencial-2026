@@ -66,3 +66,10 @@ O usuário confirmou fazer somente o mapa nesta entrega. A geometria oficial sim
 A paleta passou a Lula vermelho vibrante `#ff3347` e Flávio Bolsonaro azul vibrante `#2f8cff`, com variáveis semânticas compartilhadas. Os gráficos não receberam novas funções nesta entrega. Atualizações automáticas e audiência dos sites permanecem preservadas.
 
 Verificações executadas: 27 geometrias e DF; clique em PA; hover em MG mantendo a seleção PA; Enter selecionando MG; retorno a Brasil; paleta RGB correspondente; nenhum erro de console. Em viewport de 390px, o mapa e os detalhes empilham sem overflow, o seletor móvel tem alvo de 44px e seleciona o DF. TypeScript passou. Builds e publicação seguem nesta mesma entrega.
+
+
+## Degradê e resultado no mapa - 2026-10-25 (America/Belem)
+
+Pedido: substituir a escala de avanço por degradê azul/vermelho conforme a diferença dos percentuais oficiais, e consultar os resultados atuais ao selecionar uma UF. A interface usa os percentuais publicados, sem renormalização, em escala fixa simétrica. Dados ausentes ou ausência de votos válidos têm cor cinza. O detalhe identifica votos, percentuais, diferença em pontos percentuais, apuração, fonte e geração. Nenhum modelo de projeção ou gráfico histórico foi alterado.
+
+Validação executada em 2026-10-25 às 19h16 (America/Belem): TypeScript e diff sem erros nas duas cópias; verificações da cor para sinais, extremos fixos, empate, dados ausentes e zero votos aprovadas. No navegador local, 27 UFs presentes, clique BA com resultado/fonte estadual, e em 390px seleção DF com duas linhas de candidatos, alvo de 44px e sem overflow da página ou da legenda. API pública respondeu 200, sem erros; SP/MG/BA conferidos com os arquivos oficiais, sem divergência nos valores verificados. Publicação segue nesta mesma entrega, mantendo a agenda e a coleta contínua existentes.
