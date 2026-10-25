@@ -61,3 +61,8 @@ Paleta atual: Lula vermelho vibrante `#ff3347`; Flávio Bolsonaro azul vibrante 
 ## Imagem para compartilhar
 
 Selecione Brasil, uma região ou um estado e use **Salvar imagem** no topo. A prévia reúne votação, apuração, gráfico com 2022 e percentuais das cinco regiões; use **Baixar PNG** ou **Compartilhar imagem** quando disponível. A imagem identifica o recorte e os horários e conserva a leitura do momento do clique. Veja [funcionamento e limites](docs/compartilhamento.md).
+
+
+## Resultado oficial do primeiro turno
+
+O bloco **Resultado oficial · 1º turno** acompanha o recorte selecionado e também aparece no PNG de **Salvar imagem**, com candidatos em ordem numérica, votos, percentuais e fonte do TSE. Nas regiões, os totais são identificados como agregações das UFs. Veja [fontes e verificação](docs/primeiro-turno.md).

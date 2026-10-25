@@ -5,11 +5,13 @@ import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Download, ImageDown, Share2, X } from "lucide-react";
 import type { Scope } from "../lib/ui-types";
+import type { OfficialFirstRoundResult } from "../lib/first-round-results";
 import { captureChartSvg, renderShareImage } from "../lib/share-image";
 import type { ShareImageInput } from "../lib/share-image";
 import "./share-image-button.css";
 
 type Props = {
+  firstRound: OfficialFirstRoundResult | null;
   scope: Scope | null;
   title: string;
   regions: Scope[];
@@ -39,7 +41,7 @@ function supportsFileShare(file: File) {
   catch { return false; }
 }
 
-export function ShareImageButton({ scope, title, regions, national, reference, axisLabel, chartNote, stale }: Props) {
+export function ShareImageButton({ firstRound, scope, title, regions, national, reference, axisLabel, chartNote, stale }: Props) {
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState("");
   const [preview, setPreview] = useState<Preview | null>(null);
@@ -123,7 +125,7 @@ export function ShareImageButton({ scope, title, regions, national, reference, a
       }
       const chartSvg = svg ? captureChartSvg(svg) : null;
       const input: ShareImageInput = structuredClone({
-        scope, title, regions, national, reference, axisLabel, stale,
+        scope, title, regions, national, reference, axisLabel, stale, firstRound,
         chartNote: chartNote + (chartSvg ? "" : " Gráfico indisponível no momento da captura."),
         chartSvg, capturedAt: new Date().toISOString(),
       });

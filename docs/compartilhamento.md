@@ -21,3 +21,8 @@ A renderização acontece no navegador, com SVG independente convertido em canva
 ## Verificação
 
 Em 2026-10-25, entre 19h26 e 19h28 (America/Belem), o navegador gerou e baixou PNGs reais de Brasil, Nordeste e Bahia. A captura de Bahia usou o eixo Eleitorado em tela de 390px e manteve resolução de 1600px, sem overflow. Prévia, fechamento por Escape, restauração do foco e bloqueio do fundo foram verificados. O PNG do Brasil (1600×1636) e o estadual (1600×1569) foram inspecionados visualmente, com tabela e rodapé sem cortes. TypeScript passou nas duas cópias; o componente novo passou lint. Verificações com dados fictícios cobriram zero/null, horários distintos, preservação do SVG e lacunas, ausência de renormalização, congelamento anterior ao primeiro await, recursos externos rejeitados e aviso de cobertura regional incompleta. A publicação é conferida na mesma entrega.
+
+
+## Resultados do primeiro turno - 2026-10-25
+
+O PNG passa a conter um bloco separado com os resultados oficiais do primeiro turno do recorte capturado, incluindo candidatos em ordem numérica, votos, percentuais publicados, geração e fonte do TSE. Dados regionais são agregados das UFs e assim identificados. O [registro de fonte](primeiro-turno.md) documenta o denominador e a cobertura. A exportação conserva a mesma leitura desse bloco ao longo da renderização.

@@ -1,4 +1,5 @@
 import type { Scope } from "./ui-types";
+import type { OfficialFirstRoundResult } from "./first-round-results";
 
 export type ShareImageInput = {
   scope: Scope;
@@ -11,6 +12,7 @@ export type ShareImageInput = {
   chartNote: string;
   stale: boolean;
   capturedAt: string;
+  firstRound?: OfficialFirstRoundResult | null;
 };
 export type ShareImageResult = { blob: Blob; filename: string };
 
@@ -125,6 +127,120 @@ function qualityMessages(input: ShareImageInput): string[] {
   return messages;
 }
 
+
+/** Display-only first-round result. No shares, transfers or differences are calculated here. */
+function firstRoundBlock(input: ShareImageInput, y: number): { markup: string; height: number } {
+  const result = input.firstRound;
+  const absent = !result || result.code !== input.scope.code || result.electionId !== "6257" || result.year !== 2026 || result.round !== 1;
+  const title = `Resultado oficial · primeiro turno · 2026 · ${absent ? input.title : result.name}`;
+  const titleLines = wrap(title, 99);
+  const parts: string[] = [];
+  let cursor = y + 37;
+  parts.push(multiline(MARGIN + 24, cursor, titleLines, 25, COLORS.text, 33, 700));
+  cursor += titleLines.length * 33;
+  if (absent) {
+    const reason = result && result.code !== input.scope.code
+      ? "O resultado do primeiro turno recebido pertence a outro recorte e não foi incluído."
+      : "Resultado do primeiro turno indisponível nesta captura. Nenhum valor foi preenchido.";
+    const lines = wrap(reason, 133);
+    parts.push(multiline(MARGIN + 24, cursor, lines, 19, COLORS.muted, 27));
+    cursor += lines.length * 27;
+    parts.push(text(MARGIN + 24, cursor + 4, "Eleição TSE 6257 · cargo Presidente · primeiro turno de 04/10/2026", 17, COLORS.muted));
+    const height = cursor + 30 - y;
+    return { markup: rect(MARGIN, y, CONTENT, height) + parts.join(""), height };
+  }
+
+  const aggregated = result.aggregation || result.kind === "region";
+  const statusLines = wrap(aggregated
+    ? "Agregado do painel a partir das UFs. Contagens somadas e percentuais derivados sobre todos os votos válidos; não é um arquivo regional publicado pelo TSE."
+    : "Valores publicados pelo TSE para este recorte. Percentuais sobre todos os votos válidos, incluindo todos os candidatos.", 136);
+  parts.push(multiline(MARGIN + 24, cursor, statusLines, 17, COLORS.muted, 24));
+  cursor += statusLines.length * 24 + 5;
+  const denominatorLines = wrap(`Denominador: ${result.denominatorLabel || "todos os votos válidos do recorte"}. Votos válidos: ${count(result.validVotes)}. Eleitorado apto: ${count(result.electorate)}.`, 134);
+  parts.push(multiline(MARGIN + 24, cursor, denominatorLines, 17, COLORS.muted, 24));
+  cursor += denominatorLines.length * 24 + 5;
+  const fullCount = finite(result.sections) && result.sections > 0 && finite(result.sectionsProcessed) && result.sectionsProcessed === result.sections;
+  const confirmed = result.final && result.complete && result.coverage.complete && fullCount && result.sectionsPercent === 100 && (result.official || aggregated);
+  // A rounded partial must never become a claim of 100% totalization.
+  const roundsToHundred = finite(result.sectionsPercent) && Math.round(result.sectionsPercent * 100) === 10000;
+  const sectionsLabel = roundsToHundred && !confirmed ? "totalização de 100% não confirmada" : percent(result.sectionsPercent);
+  const status = confirmed ? "Final confirmado" : "Totalização final não confirmada neste recorte";
+  const sectionsLines = wrap(`${status} · seções totalizadas: ${sectionsLabel} · ${count(result.sectionsProcessed)} de ${count(result.sections)} seções.`, 135);
+  parts.push(multiline(MARGIN + 24, cursor, sectionsLines, 18, COLORS.text, 25, 500));
+  cursor += sectionsLines.length * 25 + 5;
+  parts.push(text(MARGIN + 24, cursor, "Eleição TSE 6257 · Presidente · primeiro turno de 04/10/2026", 17, COLORS.muted));
+  cursor += 25;
+  const sourceTime = aggregated
+    ? result.sourceRange?.earliest || result.sourceRange?.latest
+      ? `Gerações das UFs (intervalo): ${localTime(result.sourceRange.earliest)} a ${localTime(result.sourceRange.latest)} (Belém)`
+      : "Gerações das UFs: consulte os horários individuais nas fontes abaixo."
+    : `Geração da fonte TSE: ${localTime(result.sourceUpdatedAt)} (Belém)`;
+  const timeLines = wrap(sourceTime, 142);
+  parts.push(multiline(MARGIN + 24, cursor, timeLines, 17, COLORS.muted, 24));
+  cursor += timeLines.length * 24 + 1;
+  parts.push(text(MARGIN + 24, cursor, `Consulta da fonte: ${localTime(result.sourceFetchedAt)} (Belém)`, 17, COLORS.muted));
+  cursor += 25;
+
+  const warnings = [...result.warnings];
+  if (!result.complete || !result.coverage.complete) warnings.push(`Cobertura incompleta: ${count(result.coverage.available)} de ${count(result.coverage.expected)} fontes disponíveis${result.coverage.missing.length ? "; ausentes: " + result.coverage.missing.join(", ") : ""}.`);
+  if (!result.candidates.length) warnings.push("Lista de candidatos indisponível; nenhum candidato ou voto foi acrescentado.");
+  const sources = result.sources.filter(source => typeof source.url === "string" && source.url.length > 0);
+  if (aggregated ? !sources.length : !result.sourceUrl) warnings.push("Arquivo da fonte indisponível nesta captura.");
+  if (!aggregated && !result.sourceUpdatedAt) warnings.push("Horário de geração da fonte indisponível nesta captura.");
+  if (aggregated && !result.sourceRange?.earliest && !result.sourceRange?.latest && !sources.some(source => source.generatedAt)) warnings.push("Horários das gerações das UFs indisponíveis nesta captura.");
+  if (warnings.length) {
+    const warningLines = [...new Set(warnings)].flatMap(warning => wrap(warning, 134));
+    parts.push(multiline(MARGIN + 24, cursor, warningLines, 17, "#f5dca4", 24, 500));
+    cursor += warningLines.length * 24 + 7;
+  }
+  cursor += 7;
+  const numberX = MARGIN + 24, nameX = MARGIN + 114, votesX = MARGIN + 1130, percentX = WIDTH - MARGIN - 24;
+  parts.push(text(numberX, cursor, "NÚMERO", 14, COLORS.muted, 700));
+  parts.push(text(nameX, cursor, "CANDIDATURA · ORDEM NUMÉRICA", 14, COLORS.muted, 700));
+  parts.push(text(votesX, cursor, "VOTOS", 14, COLORS.muted, 700, "end"));
+  parts.push(text(percentX, cursor, "% DOS VÁLIDOS", 14, COLORS.muted, 700, "end"));
+  cursor += 13;
+  const candidates = result.candidates.slice().sort((a, b) => {
+    const aNumber = /^\d+$/.test(a.number) ? Number(a.number) : Number.POSITIVE_INFINITY;
+    const bNumber = /^\d+$/.test(b.number) ? Number(b.number) : Number.POSITIVE_INFINITY;
+    return aNumber - bNumber || a.number.localeCompare(b.number);
+  });
+  for (const candidate of candidates) {
+    const names = wrap(candidate.name || candidate.fullName || "Nome indisponível", 76);
+    const detail = [candidate.party, candidate.fullName && candidate.fullName !== candidate.name ? candidate.fullName : ""].filter(Boolean).join(" · ");
+    const detailLines = detail ? wrap(detail, 102) : [];
+    const rowHeight = Math.max(49, names.length * 25 + detailLines.length * 21 + 15);
+    const baseline = cursor + 25;
+    const candidateColor = candidate.number === "13" ? COLORS.lula : candidate.number === "22" ? COLORS.bolsonaro : COLORS.text;
+    parts.push(`<path d="M${numberX} ${cursor}H${percentX}" stroke="${COLORS.line}"/>`);
+    parts.push(text(numberX, baseline, candidate.number, 20));
+    parts.push(multiline(nameX, baseline, names, 20, COLORS.text, 25, 500));
+    if (detailLines.length) parts.push(multiline(nameX, baseline + names.length * 25, detailLines, 15, COLORS.muted, 21));
+    parts.push(text(votesX, baseline, count(candidate.votes), 20, COLORS.text, 500, "end"));
+    const rawPublished = candidate.publishedPercent ?? candidate.publishedPercentExact;
+    const published = !aggregated && typeof rawPublished === "string" && /^\d+(?:[,.]\d+)?$/.test(rawPublished.trim())
+      ? percent(Number(rawPublished.replace(",", "."))) : percent(candidate.percent);
+    parts.push(text(percentX, baseline, published, 20, candidateColor, 500, "end"));
+    cursor += rowHeight;
+  }
+  cursor += 23;
+  if (aggregated) {
+    parts.push(text(numberX, cursor, "Fontes TSE das UFs deste agregado (gerações individuais):", 16, COLORS.muted, 700));
+    cursor += 23;
+    for (const source of sources) {
+      const lines = wrap(`${source.code}: ${source.url} · ${localTime(source.generatedAt)} (Belém)`, 155);
+      parts.push(multiline(numberX, cursor, lines, 15, COLORS.muted, 21));
+      cursor += lines.length * 21;
+    }
+  } else if (result.sourceUrl) {
+    const lines = wrap(`Fonte TSE: ${result.sourceUrl}`, 155);
+    parts.push(multiline(numberX, cursor, lines, 15, COLORS.muted, 21));
+    cursor += lines.length * 21;
+  }
+  const height = cursor + 20 - y;
+  return { markup: rect(MARGIN, y, CONTENT, height) + parts.join(""), height };
+}
+
 /** A standalone snapshot layout. This function does not fetch, estimate or normalize vote shares. */
 export function buildShareSvg(input: ShareImageInput): string {
   const scope = input.scope;
@@ -205,7 +321,10 @@ export function buildShareSvg(input: ShareImageInput): string {
     parts.push(text(columnX[3], y, percent(row?.sectionsPercent), 20, COLORS.text, 400, "end"));
     parts.push(text(columnX[4], y, count(row?.pendingElectorate), 20, COLORS.text, 400, "end"));
   });
-  const footerY = tableY + tableHeight + 24;
+  const firstRoundY = tableY + tableHeight + 22;
+  const firstRound = firstRoundBlock(input, firstRoundY);
+  parts.push(firstRound.markup);
+  const footerY = firstRoundY + firstRound.height + 24;
   const footerLines = wrap(`Regiões são agregados de UFs em horários distintos. Eleitorado pendente não equivale a votos restantes. Brasil · fonte: ${localTime(input.national?.sourceUpdatedAt)} (Belém).`, 145);
   parts.push(multiline(MARGIN, footerY, footerLines, 17, COLORS.muted, 24));
   const bottom = footerY + footerLines.length * 24 + 10;
@@ -215,7 +334,13 @@ export function buildShareSvg(input: ShareImageInput): string {
 }
 
 function freezeInput(input: ShareImageInput): ShareImageInput {
-  const copied: ShareImageInput = { ...input, scope: { ...input.scope }, regions: input.regions.map(region => ({ ...region })), national: input.national ? { ...input.national } : null, reference: input.reference ? { ...input.reference } : null };
+  const copied: ShareImageInput = { ...input, scope: { ...input.scope }, regions: input.regions.map(region => ({ ...region })), national: input.national ? { ...input.national } : null, reference: input.reference ? { ...input.reference } : null, firstRound: input.firstRound ? structuredClone(input.firstRound) : null };
+  const freezeNested = (value: unknown): void => {
+    if (!value || typeof value !== "object" || Object.isFrozen(value)) return;
+    for (const item of Object.values(value)) freezeNested(item);
+    Object.freeze(value);
+  };
+  freezeNested(copied.firstRound);
   Object.freeze(copied.scope);
   copied.regions.forEach(Object.freeze);
   Object.freeze(copied.regions);
